@@ -33,33 +33,31 @@ body{
 	text-decoration:none;
 	border-bottom:1px dotted #FFF;
 }
-
 #wrapper{
 	position:absolute;
 	min-width:300px;
 	width:750px;
-	height:300px;
+	height:400px;
 
 	left:50%;
 	margin-left:-375px;
 	top:50%;
 	margin-top:-150px;
-
-	overflow: hidden;
-
-	border-radius:4px;
-	background:rgba(255,255,255,0.85);
-
-	-webkit-box-shadow:  3px 3px 5px 2px rgba(0, 0, 0, 0.7);   
-   			box-shadow:  3px 3px 5px 2px rgba(0, 0, 0, 0.7);
+	text-align: right;
 }
 .button_list{
 	list-style: none;
 	margin:0;
+	margin-bottom:10px;
 	padding:0;
 	font-size:0;
 	width:100%;
-	height:100%;
+	height:300px;
+	background:rgba(255,255,255,0.85);
+	-webkit-box-shadow:  3px 3px 5px 2px rgba(0, 0, 0, 0.7);   
+   			box-shadow:  3px 3px 5px 2px rgba(0, 0, 0, 0.7);
+
+   	border-radius:5px;
 }
 .button_list>li{
 	display:inline-block;
@@ -76,12 +74,65 @@ body{
 .button_list>li{
 	padding: 24px;
 }
+.btn3d{
+	width: 100px;
+	margin:0 10px;
 
+	outline:0;
+	cursor:pointer;
+    color: rgba(255,255,255,1);
+    text-decoration: none;
+    background-color: rgba(219,87,5,1);
+    font-family: 'Yanone Kaffeesatz';
+    font-weight: 700;
+    font-size: 2em;
+    display: inline-block;
+    padding: 4px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    -webkit-box-shadow: 0px 9px 0px rgba(219,31,5,1), 0px 9px 25px rgba(0,0,0,.7);
+    -moz-box-shadow: 0px 9px 0px rgba(219,31,5,1), 0px 9px 25px rgba(0,0,0,.7);
+    box-shadow: 0px 9px 0px rgba(219,31,5,1), 0px 9px 25px rgba(0,0,0,.7);
+	text-align: center;
+	
+	-webkit-transition: all .1s ease;
+	-moz-transition: all .1s ease;
+	-ms-transition: all .1s ease;
+	-o-transition: all .1s ease;
+	transition: all .1s ease;
 
-
-#asd{
-	width:300px;
-	height:300px;
-	background: red;
-	position: absolute;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.btn3d:active {
+    -webkit-box-shadow: 0px 3px 0px rgba(219,31,5,1), 0px 3px 6px rgba(0,0,0,.9);
+    -moz-box-shadow: 0px 3px 0px rgba(219,31,5,1), 0px 3px 6px rgba(0,0,0,.9);
+    box-shadow: 0px 3px 0px rgba(219,31,5,1), 0px 3px 6px rgba(0,0,0,.9);
+    position: relative;
+    top: 6px !important;
+}
+#record{
+	background-color: rgba(114,48,255,1);
+	-webkit-box-shadow: 0px 9px 0px rgba(114,5,255,1), 0px 9px 25px rgba(0,0,0,.7);
+    -moz-box-shadow: 0px 9px 0px rgba(114,5,255,1), 0px 9px 25px rgba(0,0,0,.7);
+    box-shadow: 0px 9px 0px rgba(114,5,255,1), 0px 9px 25px rgba(0,0,0,.7);
+}
+#record:active{
+	-webkit-box-shadow: 0px 3px 0px rgba(114,5,255,1), 0px 3px 6px rgba(0,0,0,.9);
+    -moz-box-shadow: 0px 3px 0px rgba(114,5,255,1), 0px 3px 6px rgba(0,0,0,.9);
+    box-shadow: 0px 3px 0px rgba(114,5,255,1), 0px 3px 6px rgba(0,0,0,.9);
+    position: relative;
+    top: 6px !important;
+}
+#record.clicked{
+	-webkit-box-shadow: 0px 3px 0px rgba(114,5,255,1), 0px 3px 6px rgba(0,0,0,.9);
+    -moz-box-shadow: 0px 3px 0px rgba(114,5,255,1), 0px 3px 6px rgba(0,0,0,.9);
+    box-shadow: 0px 3px 0px rgba(114,5,255,1), 0px 3px 6px rgba(0,0,0,.9);
+    position: relative;
+    top: 6px !important;
 }

@@ -96,10 +96,6 @@ CirclePlayer.prototype = {
 			self._initCircleControl();
 		});
 
-		this.player.bind($.jPlayer.event.play + this.eventNamespace, function(event) {
-			$(this).jPlayer("pauseOthers");
-		});
-
 		// This event fired as play time increments
 		this.player.bind($.jPlayer.event.timeupdate + this.eventNamespace, function(event) {
 			if (!self.dragging) {
