@@ -1,21 +1,31 @@
 #theme_admin{
-	padding:0;
+	width:400px;
+	min-height:500px;
+
+	margin-left:-200px;
+	margin-top:-250px;
+
+	padding:5px;
 }
 
-#theme_admin p{
-	padding:10px;
-	text-decoration: underline;
-	font-size:16px;
+#theme_admin h2{
+	font-weight: normal;
+	text-align: center;
+	margin-bottom:10px;
+	font-size:17px;
 }
 #theme_admin .my-themes{
 	font-family: sans-serif;
 }
 #theme_admin ul{
+	margin:-5px;
 	list-style:none;
 	font-size:0;
+	height:250px;
+	overflow-y:auto;
 }
 #theme_admin li{
-	font-size:16px;
+	font-size:15px;
 	display:block;
 	width:100%;
 	padding:10px 5px;
@@ -30,23 +40,36 @@
 #theme_admin .buttons{
 	position:absolute;
 	right:0;
-	height:30px;
+	height:25px;
 	top:50%;
-	margin-top:-15px;
+	margin-top:-12.5px;
 }
 #theme_admin .rename{
 	background:url("../images/close.png");
 	background-size:100% 100%;
-	width:30px;
-	height:30px;
+	width:25px;
+	height:25px;
 	display: inline-block;
 	cursor:pointer;
 }
 #theme_admin .remove{
 	background:url("../images/close.png");
 	background-size:100% 100%;
-	width:30px;
-	height:30px;
+	width:25px;
+	height:25px;
 	display: inline-block;
 	cursor:pointer;
+}
+
+#uploadform{
+	text-align: left;
+	width:200px;
+	margin:0 auto;
+}
+#uploadform input{
+	padding:5px;
+	margin:5px auto;
+	text-align: left;
+	width:200px;
+
 }

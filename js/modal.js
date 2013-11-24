@@ -1,12 +1,10 @@
-var MODAL_WIDTH=300;
-var MODAL_HEIGHT=200;
-
 $(document).ready(function(){
 	$(".modal .close").click(function(){
-		$(this).parent().css('top','-50%');
-		$('.black_overlay').fadeOut(function(){
-			$('#nav_modal >*:not(:first-child)').hide();
-			$(this).remove();
+		$(this).parent().fadeOut(function(){
+			$('.black_overlay').fadeOut(function(){
+				$('#nav_modal >*:not(:first-child)').hide();
+				$(this).remove();
+			});
 		});
 	});
 
@@ -22,9 +20,10 @@ $(document).ready(function(){
 });
 
 function showModal(which){
-	$(which).css('top','50%');
 	$('body').append('<div class="black_overlay"></div>');
-	$('.black_overlay').fadeIn();
+	$('.black_overlay').fadeIn(function(){
+		$(which).show('medium');
+	});
 }
 
 function changeForm(){

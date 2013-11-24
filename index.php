@@ -57,7 +57,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>AI Studio v0.1</title>
+	<title>AI Studio v0.1.2</title>
 	<meta charset="utf-8">
 	<script src="http://codeorigin.jquery.com/jquery-1.10.2.min.js"></script>
 	<script src="js/prefixfree.min.js"></script>
@@ -97,20 +97,20 @@
 				if(isset($_SESSION['username']) && !empty($_SESSION["username"])){
 					echo '<li style="margin-right:5px;font-size:16px;">'.$_SESSION['username'].' : </li>';
 					echo '<li><a href="index.php?logout=true">Logout</a></li>';
-					echo '<li><a id="theme_admin_btn" href="#">My themes</a></li>';
+					echo '<li><a id="theme_admin_btn" href="#">Theme admin</a></li>';
 				}
 			?>
 		</ul>
 	</nav>
 	<div id="stream">
-	<?php
-		foreach ($stream["error"] as $value) {
-			echo '<p style="color:rgb(255,0,0);">'.$value.'</p><br>';
-		}
-		foreach ($stream["valid"] as $value) {
-			echo '<p style="color:rgb(0,255,0);">'.$value.'</p><br>';
-		}
-	?>
+		<?php
+			foreach ($stream["error"] as $value) {
+				echo '<p style="color:rgb(255,0,0);">'.$value.'</p><br>';
+			}
+			foreach ($stream["valid"] as $value) {
+				echo '<p style="color:rgb(0,255,0);">'.$value.'</p><br>';
+			}
+		?>
 	</div>
 	<div id="wrapper">
 		<ul class="button_list">
@@ -290,10 +290,7 @@
 			<div id="theme_upload">
 				<?php
 					if(isset($_SESSION['username']) && !empty($_SESSION['username'])){
-						echo 'Upload your own music scheme (*.ogg)'.'<BR>';
-						echo '<form method="post" action="upload.php" enctype="multipart/form-data">';
-						echo '<input name="filesToUpload[]" id="filesToUpload" type="file" accept="audio/ogg" multiple="" />';
-						echo '</form>';
+						echo 'Use "Theme admin" to manage your themes';
 					}else{
 						echo 'Please log in so that you can upload your own music scheme';
 					}
@@ -301,9 +298,6 @@
 			</div>
 				<label for='theme_select'>Select your theme:</label>
 				<select id="theme_select" name="theme_select">asd
-					<option>piano</option>
-					<option>SHM-The one</option>
-					<option>guitar</option>
 				</select>
 			<br>
 				<label for='key_bindings'>Change key bindings:</label>
@@ -313,8 +307,8 @@
 			<div style="margin-top:-5px;">
 				<label for="release">Button toggle:</label>
 				<div name="release" id="release" class="onoffswitch">
-					<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
-					<label class="onoffswitch-label" for="myonoffswitch">
+					<input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="toggle">
+					<label class="onoffswitch-label" for="toggle">
 					<div class="onoffswitch-inner"></div>
 					<div class="onoffswitch-switch"></div>
 					</label>
@@ -345,6 +339,42 @@
 		?>
 	</div>
 
-	
+	<div id="theme_admin" class="modal">
+		<div class="close"></div>
+		
+		<div class="my-themes">
+			<h2>My Themes:</h2>
+			<ul id="theme-list">
+				<?php
+					if(isset($_SESSION['username']) && !empty($_SESSION['username'])){
+						$username=$_SESSION['username'];
+						$result=$link->query("SELECT * FROM `custom_themes` WHERE `author`='$username'") or die("Error connecting to database");
+						while($row = $result->fetch_assoc()){
+							echo '<li data-id="'.$row['id'].'">';
+							echo $row['name'];
+							echo '<div class="buttons">';
+							echo '	<div class="rename"></div>';
+							echo '	<div class="remove"></div>';
+							echo '</div>';
+							echo '</li>';
+						}
+					}
+				?>
+			</ul>
+		</div>
+		<br>
+		<div class="theme_upload">
+			<h2>Upload a theme:</h2>
+			<p>Upload your own music scheme (*.ogg). You must upload all 10 ogg files at the same time. Combined size must be less than 5MB.</p>
+
+			<form id="uploadform" method="post" action="upload.php" enctype="multipart/form-data">
+			  <input id="theme-name" type="text" name="name" placeholder="Theme name">
+			  <input name="files[]" id="files" type="file" multiple="" /><br>
+			  <input style="text-align:center;" type="submit" value="Upload" id="submitbtn">
+			</form>
+
+	        <script src='js/upload.js'></script>
+		</div>
+	</div>
 	
 </html>
