@@ -34,7 +34,7 @@
 
 	transition:top 1s ease;
 }
-.modal #close{
+.modal .close{
 	cursor:pointer;
 	position:absolute;
 	
@@ -47,10 +47,6 @@
 	background:url("../images/close.png");
 	background-size:100% 100%;
 }
-.modal >*:not(:first-child){
-	display:none;
-	position:relative;	
-}
 .modal a{
 	color:#000;
 	text-decoration:none;
@@ -59,7 +55,7 @@
 
 .modal #login form{
 	text-align: center;
-	padding-top:10px;
+	padding-top:5px;
 }
 .modal #login input{
 	padding:5px;
@@ -139,4 +135,18 @@
 }
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
 	right: 0px;
+}
+
+
+#nav_modal >*:not(:first-child){
+	display:none;
+	position:relative;	
+}
+
+#theme_admin{
+	width:400px;
+	height:400px;
+
+	margin-left:-200px;
+	margin-top:-200px;
 }

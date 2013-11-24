@@ -1,0 +1,52 @@
+#theme_admin{
+	padding:0;
+}
+
+#theme_admin p{
+	padding:10px;
+	text-decoration: underline;
+	font-size:16px;
+}
+#theme_admin .my-themes{
+	font-family: sans-serif;
+}
+#theme_admin ul{
+	list-style:none;
+	font-size:0;
+}
+#theme_admin li{
+	font-size:16px;
+	display:block;
+	width:100%;
+	padding:10px 5px;
+	box-sizing:border-box;
+	border-bottom:1px solid black;
+	position: relative;
+}
+#theme_admin li:first-child{
+	border-top:1px solid black;
+}
+
+#theme_admin .buttons{
+	position:absolute;
+	right:0;
+	height:30px;
+	top:50%;
+	margin-top:-15px;
+}
+#theme_admin .rename{
+	background:url("../images/close.png");
+	background-size:100% 100%;
+	width:30px;
+	height:30px;
+	display: inline-block;
+	cursor:pointer;
+}
+#theme_admin .remove{
+	background:url("../images/close.png");
+	background-size:100% 100%;
+	width:30px;
+	height:30px;
+	display: inline-block;
+	cursor:pointer;
+}

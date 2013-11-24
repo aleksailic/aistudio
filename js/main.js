@@ -14,6 +14,12 @@ $(document).ready(function(){
 
     initPlayers('theone');
     record = new record();
+
+    setTimeout(function(){
+    	$("#stream").fadeOut();
+    },5000);
+    
+   setStorage('ribica','cka'); 
 });
 function arduinoReady(){
 	button_array=new Array();
@@ -41,10 +47,13 @@ function initPlayers(theme){
 		}, {
 			cssSelectorAncestor: "#cp_container_"+id
 		});
+
+		$("#btn" + id).jPlayer("load");
 	}
 }
 function btnPressed(id){
 	$("#btn" + id).jPlayer("play",0);
+	$("#btn" + id).jPlayer("loop",true);
 	
 	if(record.recording){
 		record.add(id,1,new Date());
@@ -118,7 +127,21 @@ function record(){
 	this.prevTime=null;
 	this.recData=new Array();
 }
+function setStorage(property,value){
+	if(typeof(Storage)!=="undefined"){//check if localStorage is supported
+		if(typeof(localStorage[property])=='undefined'){
+			//alert("property not set");
+		}else{
+			//alert('property set');
+		}
+	}else{
+		alert("You have an old browser which doesn't support WebStorage. Consider downloading Google Chrome or Mozilla Firefox.");
+	}
+}
+function checkStorage(property){
 
+	return false;
+}
 
 
 
@@ -169,6 +192,6 @@ $(document).ready(function(){
 		record.import();
 	});
 	$("#save").click(function(){
-		alert(record.export());
+		prompt("Press CTRL+C to copy",record.export());
 	});
 });

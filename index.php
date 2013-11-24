@@ -1,10 +1,58 @@
 <?php
 	session_start();
-	if( empty($_POST['username']) || empty($_POST['pass'])){
-		//not logged in
-	}else{
-		//ckeck if login info is correct
+	require ('connect.inc.php');
+
+	$stream = array("error"=>array(),"valid"=>array());
+
+	if ( isset($_POST['name']) ){ //login or register form sent
+		require('connect.inc.php');
+
+		if($_POST['name']=='login'){ // check login
+			if( !empty($_POST['username']) && !empty($_POST['pass']) ){
+
+				$username = $link->escape_string($_POST['username']);
+				$pass = md5($_POST['pass']);
+
+				$query = $link->query("SELECT * FROM `users` WHERE `username`='$username' AND `password`='$pass'") or die("Error executing the query");
+				if($query->num_rows==0){
+					array_push($stream["error"], "Login info incorrect");
+				}else if($query->num_rows==1){
+					$obj=$query->fetch_object();
+					$_SESSION['username']=$obj->username;
+					array_push($stream["valid"], "Successfully logged in. Welcome ".$obj->fullname);
+				}	
+			}else{
+				array_push($stream["error"], "Some of the fields were empty!");
+			}
+		}else if($_POST['name']=='register'){ //register user
+			if( !empty($_POST['username']) && !empty($_POST['pass']) && !empty($_POST['mail']) && !empty($_POST['fullname']) && filter_var( $_POST['mail'], FILTER_VALIDATE_EMAIL ) ){
+				$username = $link->escape_string($_POST['username']);
+				$pass = md5($_POST['pass']);
+				$email=$link->escape_string($_POST['mail']);
+				$fullname=$link->escape_string($_POST['fullname']);
+
+				//check if username is unique
+				$query = $link->query("SELECT * FROM `users` WHERE `username`='$username'") or die("Error executing the query");
+				if($query->num_rows!==0){
+					array_push($stream["error"], "username already exists");
+				}else{
+					$query = $link->query("INSERT INTO `users` (`username`,`password`,`email`,`fullname`) VALUES ('$username','$pass','$email','$fullname')") or die("Error inserting data into database");
+
+					array_push($stream["valid"], "Successfully registered. You are free to log in".$fullname);
+				}
+
+			}else{
+				array_push($stream["error"], "Some of the fields were empty or didn't pass validation!");
+			}
+		}
 	}
+
+
+	if( isset($_GET['logout']) ){
+		unset($_SESSION['username']);
+		array_push($stream["valid"], "Successfully logged out");
+	}
+	
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,17 +74,44 @@
 
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	<link rel="stylesheet" type="text/css" href="css/modal.css">
+	<link rel="stylesheet" type="text/css" href="css/theme_admin.css">
 	<script src="js/modal.js"></script>
 	<script src="js/main.js"></script>
 </head>
 <body>
 	<nav id="auth_header">
 		<ul>
-			<li><a href="#">Login</a></li>
+			<?php
+				if( !isset($_SESSION['username']) ){
+					echo '<li><a href="#">Login</a></li>';
+				}
+			?>
 			<li><a href="#">Settings</a></li>
+			<li><a href="#">FAQ</a></li>
 			<li><a href="#">About</a></li>
 		</ul>
 	</nav>
+	<nav id="logged_header">
+		<ul>
+			<?php
+				if(isset($_SESSION['username']) && !empty($_SESSION["username"])){
+					echo '<li style="margin-right:5px;font-size:16px;">'.$_SESSION['username'].' : </li>';
+					echo '<li><a href="index.php?logout=true">Logout</a></li>';
+					echo '<li><a id="theme_admin_btn" href="#">My themes</a></li>';
+				}
+			?>
+		</ul>
+	</nav>
+	<div id="stream">
+	<?php
+		foreach ($stream["error"] as $value) {
+			echo '<p style="color:rgb(255,0,0);">'.$value.'</p><br>';
+		}
+		foreach ($stream["valid"] as $value) {
+			echo '<p style="color:rgb(0,255,0);">'.$value.'</p><br>';
+		}
+	?>
+	</div>
 	<div id="wrapper">
 		<ul class="button_list">
 			<li>
@@ -207,16 +282,23 @@
 		<a class="btn3d" id="save" href="javascript:void(0);">SAVE</a>
 		<a class="btn3d" id="record" href="javascript:void(0);">REC</a>
 	</div>
-	<div class="modal">
-		<div id="close"></div>
+	<div id="nav_modal" class="modal">
+		<div class="close"></div>
 		
 		<div id="about">©2013 <a target="_blank" href="http://codepen.io/aleksailic">Aleka Ilic</a>. All rights reserved.</div>
 		<div id="settings">
-			<div id="theme_upload">Please log in so that you can upload your own music scheme</div>
-			<!--<div id="theme_upload">
-				Upload your own music scheme (*.zip)<br>
-				<input name="upload" id="upload" accept="application/zip" type="file">
-			</div>-->
+			<div id="theme_upload">
+				<?php
+					if(isset($_SESSION['username']) && !empty($_SESSION['username'])){
+						echo 'Upload your own music scheme (*.ogg)'.'<BR>';
+						echo '<form method="post" action="upload.php" enctype="multipart/form-data">';
+						echo '<input name="filesToUpload[]" id="filesToUpload" type="file" accept="audio/ogg" multiple="" />';
+						echo '</form>';
+					}else{
+						echo 'Please log in so that you can upload your own music scheme';
+					}
+				?>
+			</div>
 				<label for='theme_select'>Select your theme:</label>
 				<select id="theme_select" name="theme_select">asd
 					<option>piano</option>
@@ -239,21 +321,30 @@
 				</div> 
 			</div>
 		</div>
-		<div id="login">
-			<form action="index.php" method="POST">
-				<input type="text" name="username" placeholder="Username" id="username">
-				<input type="password" name="pass" placeholder="Password" id="pass">
-				<input type="submit">
-				<a href="#">Register</a>
-			</form>
-			<form style="display:none;" action="register.php" method="POST">
-				<input type="text" name="username" placeholder="Username" id="username">
-				<input type="password" name="pass" placeholder="Password" id="pass">
-				<input type="email" name="mail" placeholder="E-Mail" id="mail">
-				<input type="submit">
-				<a href="#">Login</a>
-			</form>
-			
-		</div>
+		<?php
+			if(!isset($_SESSION['username'])){
+				echo '<div id="login">';
+				echo ' 	<form action="index.php" method="POST" id="register-form"> ';
+				echo ' 		<input type="text" name="fullname" placeholder="Full Name" id="fullname"> ';
+				echo ' 		<input type="text" name="username" placeholder="Username" id="username"> ';
+				echo ' 		<input type="password" name="pass" placeholder="Password" id="pass"> ';
+				echo ' 		<input type="email" name="mail" placeholder="E-Mail" id="mail"> ';
+				echo ' 		<input type="hidden" name="name" value="register"> ';
+				echo ' 		<input type="submit"> ';
+				echo ' 		<a href="javascript:changeForm()">Login</a> ';
+				echo ' 	</form> ';
+				echo ' 	<form action="index.php" method="POST" id="login-form"> ';
+				echo ' 		<input type="text" name="username" placeholder="Username" id="username"> ';
+				echo ' 		<input type="password" name="pass" placeholder="Password" id="pass"> ';
+				echo ' 		<input type="hidden" name="name" value="login"> ';
+				echo ' 		<input type="submit"> ';
+				echo ' 		<a href="javascript:changeForm()">Register</a> ';
+				echo ' 	</form> ';	
+				echo '</div>';
+			}
+		?>
 	</div>
+
+	
+	
 </html>
