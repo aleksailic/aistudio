@@ -21,9 +21,9 @@ $("#uploadform").submit(function(e)
         //output log to stream div and console
         console.log(data.status+": "+data.data);
         if(data.status=='error'){
-          streamOutput('<p style="color:rgb(255,0,0)">'+data.data+'</p>');  
+            streamOutput(data.data,false);  
         }else{
-            streamOutput('<p style="color:rgb(0,255,0)">'+data.data+'</p>');
+            streamOutput(data.data,true);
         }
 
         //if successful add newly created theme to the list without refreshing the page
@@ -42,6 +42,7 @@ $("#uploadform").submit(function(e)
     },
      error: function(jqXHR, textStatus, errorThrown)
      {
+        streamOutput('An error occured',false);  
      }         
     });
     e.preventDefault(); //Prevent Default action.

@@ -2,7 +2,7 @@
 	session_start();
 	require ('connect.inc.php');
 
-	$stream = array("error"=>array(),"valid"=>array());
+	$stream = array("error"=>array(),"valid"=>array()); //stream handling array
 
 	if ( isset($_POST['name']) ){ //login or register form sent
 		require('connect.inc.php');
@@ -10,26 +10,26 @@
 		if($_POST['name']=='login'){ // check login
 			if( !empty($_POST['username']) && !empty($_POST['pass']) ){
 
-				$username = $link->escape_string($_POST['username']);
-				$pass = md5($_POST['pass']);
+				$username = $link->escape_string($_POST['username']); //escape those nasty chars
+				$pass = md5($_POST['pass']); //get the password hash ( because pw hash is in db)
 
-				$query = $link->query("SELECT * FROM `users` WHERE `username`='$username' AND `password`='$pass'") or die("Error executing the query");
+				$query = $link->query("SELECT * FROM `users` WHERE `username`='$username' AND `password`='$pass'") or die("Error executing the query"); //find the user with given username and password
 				if($query->num_rows==0){
-					array_push($stream["error"], "Login info incorrect");
-				}else if($query->num_rows==1){
-					$obj=$query->fetch_object();
-					$_SESSION['username']=$obj->username;
-					array_push($stream["valid"], "Successfully logged in. Welcome ".$obj->fullname);
+					array_push($stream["error"], "Login info incorrect"); //push error -message to stream
+				}else if($query->num_rows==1){ //login successful
+					$obj=$query->fetch_object(); //fetch the user object
+					$_SESSION['username']=$obj->username; //login is correct so set new session
+					array_push($stream["valid"], "Successfully logged in. Welcome ".$obj->fullname); //push successful message to stream
 				}	
 			}else{
-				array_push($stream["error"], "Some of the fields were empty!");
+				array_push($stream["error"], "Some of the fields were empty!"); //push error message to stream
 			}
 		}else if($_POST['name']=='register'){ //register user
 			if( !empty($_POST['username']) && !empty($_POST['pass']) && !empty($_POST['mail']) && !empty($_POST['fullname']) && filter_var( $_POST['mail'], FILTER_VALIDATE_EMAIL ) ){
-				$username = $link->escape_string($_POST['username']);
-				$pass = md5($_POST['pass']);
-				$email=$link->escape_string($_POST['mail']);
-				$fullname=$link->escape_string($_POST['fullname']);
+				$username = $link->escape_string($_POST['username']); //escape those nasty chars
+				$pass = md5($_POST['pass']); //get the password hash ( because pw hash is in db)
+				$email=$link->escape_string($_POST['mail']); //escape those nasty chars
+				$fullname=$link->escape_string($_POST['fullname']); //escape those nasty chars
 
 				//check if username is unique
 				$query = $link->query("SELECT * FROM `users` WHERE `username`='$username'") or die("Error executing the query");
@@ -57,9 +57,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<meta http-equiv="cache-control" content="max-age=0" />
+	<meta http-equiv="cache-control" content="no-cache" />
+	<meta http-equiv="expires" content="0" />
+	<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+	<meta http-equiv="pragma" content="no-cache" />
 	<title>AI Studio v0.1.2</title>
 	<meta charset="utf-8">
-	<script src="http://codeorigin.jquery.com/jquery-1.10.2.min.js"></script>
+	<script src="js/jquery-1.10.2.min.js"></script>
 	<script src="js/prefixfree.min.js"></script>
 
 	<script src="js/Breakout.min.js"></script>
